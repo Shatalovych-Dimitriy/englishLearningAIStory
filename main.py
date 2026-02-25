@@ -26,7 +26,7 @@ if st.sidebar.button("Перевірити доступні моделі"):
     except Exception as e:
         st.sidebar.error(f"Помилка доступу: {e}")
 # --- ДІАГНОСТИКА МОДЕЛЕЙ (Кінець) ---
-model = genai.GenerativeModel('gemini-1.5-flash')
+model = genai.GenerativeModel('gemini-2.5-flash')
 #model = genai.GenerativeModel('gemini-1.5-flash')
 
 # Функція для розбиття списку на частини (chunks)
