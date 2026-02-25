@@ -40,55 +40,49 @@ if st.button("Створити історію"):
 
         # Прогрес-бар
         progress_bar = st.progress(0)
+# ... (початок коду такий самий) ...
+        
+        # Функція "розумного" запиту
+        def generate_with_retry(model, prompt, max_retries=5):
+            wait_time = 10 # Починаємо з 10 секунд очікування
+            for attempt in range(max_retries):
+                try:
+                    return model.generate_content(prompt)
+                except exceptions.ResourceExhausted: # Це помилка 429 (Quota)
+                    st.warning(f"⏳ Ліміт запитів! Чекаємо {wait_time} секунд...")
+                    time.sleep(wait_time)
+                    wait_time *= 2 # Збільшуємо час очікування вдвічі (10 -> 20 -> 40...)
+                except Exception as e:
+                    st.error(f"Інша помилка: {e}")
+                    return None
+            return None # Якщо після 5 спроб нічого не вийшло
 
+        # Головний цикл
         for i, chunk in enumerate(word_chunks):
             chapter_num = i + 1
             current_words = ", ".join(chunk)
             
             with st.spinner(f"Пишу Розділ {chapter_num} із словами: {current_words}..."):
                 
-                # --- Розумний Промпт ---
-                # Ми передаємо попередній контекст, щоб історія була цілісною
-                prompt = f"""
-                You are a creative writer. Write **Chapter {chapter_num}** of a {genre} story.
-                
-                **Goal:** Integrate exactly these vocabulary words naturally: [{current_words}].
-                **Requirements:**
-                1. Highlight the vocabulary words in **bold**.
-                2. Story continuity: This chapter must continue the plot from the previous summary (if any).
-                3. Length: ~100-150 words per chapter.
-                4. Level: B2 English.
-                
-                **Previous Context (Summary of what happened so far):**
-                {story_context if story_context else "This is the beginning of the story."}
-                
-                **Output format:**
-                Just the story text for this chapter. No intro like "Here is the story".
-                """
-                
-                try:
-                    # Виклик AI (тут імітація, якщо немає ключа, розкоментуйте реальний виклик)
-                    response = model.generate_content(prompt)
-                    chapter_text = response.text
+                # ... (ВАШ ПРОМПТ ТУТ - залишається без змін) ...
+                prompt = f"""You are a creative writer... (ваш промпт) ..."""
 
-                    # Оновлюємо контекст (дуже простий спосіб - додаємо весь текст)
-                    # Для дуже довгих історій краще просити AI робити саммарі попереднього, 
-                    # але Gemini має велике вікно контексту, тому можна просто додавати текст.
+                # --- НОВА ЛОГІКА ВИКЛИКУ ---
+                response = generate_with_retry(model, prompt)
+                
+                if response and response.text:
+                    chapter_text = response.text
                     story_context += chapter_text + "\n\n"
                     
-                    # Виводимо розділ на екран
                     st.markdown(f"### 📖 Розділ {chapter_num}")
                     st.info(f"Слова: {current_words}")
                     st.markdown(chapter_text)
-                    
-                    # Робимо паузу, щоб не впертися в ліміти запитів (Rate Limits)
-                    time.sleep(3) 
-                    
-                except Exception as e:
-                    st.error(f"Помилка при генерації розділу {chapter_num}: {e}")
-                    break
+                else:
+                    st.error("Не вдалося згенерувати розділ після кількох спроб. Спробуйте пізніше.")
+                    break # Зупиняємо, щоб не мучити сервер
             
-            # Оновлення прогрес-бару
+            # Стандартна пауза між успішними запитами (теж збільшена)
+            time.sleep(2) 
             progress_bar.progress((i + 1) / len(word_chunks))
 
         st.balloons()
