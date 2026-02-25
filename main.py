@@ -82,7 +82,7 @@ if st.button("Створити історію"):
                     st.markdown(chapter_text)
                     
                     # Робимо паузу, щоб не впертися в ліміти запитів (Rate Limits)
-                    time.sleep(1) 
+                    time.sleep(3) 
                     
                 except Exception as e:
                     st.error(f"Помилка при генерації розділу {chapter_num}: {e}")
