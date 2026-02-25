@@ -15,7 +15,7 @@ st.title("🎬 Vocab Series: Вивчаємо слова серіалом")
 
 # Ввід списку слів (наприклад, 10-20 слів)
 text_input = st.text_area(
-    "Вставте сюди ваш список слів (через кому):", 
+    "Вставте сюди ваш список слів:", 
     "ambitious, hesitant, overcome, barrier, triumph, ancient, mysterious, scroll, decipher, secret, journey, unexpected, companion, betrayal, loyalty",
     height=150
 )
