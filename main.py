@@ -69,14 +69,8 @@ if st.button("Створити історію"):
                 
                 try:
                     # Виклик AI (тут імітація, якщо немає ключа, розкоментуйте реальний виклик)
-                    # response = model.generate_content(prompt)
-                    # chapter_text = response.text
-                    
-                    # --- ЗАМІТКА ДЛЯ ВАС: --- 
-                    # Оскільки я не можу викликати API без вашого ключа, 
-                    # ось приклад того, що поверне AI:
-                    chapter_text = f"**Chapter {chapter_num}**\n\nHere implies a story using **{chunk[0]}** and **{chunk[1] if len(chunk)>1 else ''}**. The hero decided to **{chunk[-1]}**..." 
-                    # У реальному коді видаліть рядки вище і використовуйте response.text
+                    response = model.generate_content(prompt)
+                    chapter_text = response.text
 
                     # Оновлюємо контекст (дуже простий спосіб - додаємо весь текст)
                     # Для дуже довгих історій краще просити AI робити саммарі попереднього, 
