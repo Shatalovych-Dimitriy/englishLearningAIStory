@@ -5,7 +5,28 @@ import time
 # --- Налаштування ---
 API_KEY = st.secrets["api_key"] # Розкоментуйте і вставте ключ, або налаштуйте змінні середовища
 genai.configure(api_key=API_KEY)
-model = genai.GenerativeModel('gemini-3.1-pro-preview-customtools')
+# --- ДІАГНОСТИКА МОДЕЛЕЙ (Початок) ---
+st.sidebar.header("🔧 Діагностика API")
+
+if st.sidebar.button("Перевірити доступні моделі"):
+    try:
+        st.sidebar.write("Звертаюсь до Google...")
+        available_models = []
+        
+        # Запитуємо список усіх моделей
+        for m in genai.list_models():
+            # Нам потрібні тільки ті, що вміють генерувати текст ('generateContent')
+            if 'generateContent' in m.supported_generation_methods:
+                available_models.append(m.name)
+        
+        # Виводимо список
+        st.sidebar.success("Знайдено моделей: " + str(len(available_models)))
+        st.sidebar.code("\n".join(available_models))
+        
+    except Exception as e:
+        st.sidebar.error(f"Помилка доступу: {e}")
+# --- ДІАГНОСТИКА МОДЕЛЕЙ (Кінець) ---
+model = genai.GenerativeModel('gemini-1.5-flash')
 #model = genai.GenerativeModel('gemini-1.5-flash')
 
 # Функція для розбиття списку на частини (chunks)
