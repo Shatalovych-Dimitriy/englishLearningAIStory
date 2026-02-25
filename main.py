@@ -5,7 +5,7 @@ import time
 # --- Налаштування ---
 API_KEY = st.secrets["api_key"] # Розкоментуйте і вставте ключ, або налаштуйте змінні середовища
 genai.configure(api_key=API_KEY)
-model = genai.GenerativeModel('gemini-pro')
+model = genai.GenerativeModel('gemini-3.1-pro-preview-customtools')
 #model = genai.GenerativeModel('gemini-1.5-flash')
 
 # Функція для розбиття списку на частини (chunks)
