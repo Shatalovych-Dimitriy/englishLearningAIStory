@@ -1,5 +1,6 @@
 import streamlit as st
 import google.generativeai as genai
+from google.api_core import exceptions
 import time
 
 # --- Налаштування ---
