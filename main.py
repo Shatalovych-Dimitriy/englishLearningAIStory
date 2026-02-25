@@ -10,7 +10,7 @@ genai.configure(api_key=API_KEY)
 # --- СПИСОК МОДЕЛЕЙ ДЛЯ "КАРУСЕЛІ" ---
 # Програма буде пробувати їх по черзі
 MODEL_LIST = [
-    'models/gemini-2.5-flash',       # Спроба 1: Найновіша і найшвидша
+    'gemini-2.5-flash-lite',       # Спроба 1: Найновіша і найшвидша
     'models/gemini-2.0-flash',       # Спроба 2: Стабільна швидка
     'models/gemini-2.0-flash-lite',  # Спроба 3: Економна
     'models/gemini-2.0-flash-001',       # Спроба 4: Стандартна
